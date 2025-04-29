@@ -5,10 +5,6 @@ from math import sin, cos, asin, atan, pi as PI
 class Matrix:
     M: list[list[float]]
 
-    def __init__(self, M: list[list[tuple]]):
-        M = M.copy()
-        return None
-
     def __mul__(self, other: 'Matrix'):
         A = self.M
         B = Matrix.transpose(other).M
@@ -26,6 +22,9 @@ class Matrix:
                                   for c, col in enumerate(row)]
                                   for r, row in enumerate(A)]
         return Matrix(li)
+    
+    def __str__(self):
+        return self.M.__str__()
 
     @staticmethod
     def transpose(m: 'Matrix'):
@@ -161,3 +160,37 @@ class Color:
         g = (rgb // 256) % 256
         b = ((rgb // 256) // 256) % 256
         return (r, g, b)
+
+if __name__ == "__main__":
+    #Arrange
+    V = Matrix.Vector(2, 3, 0)
+    R = Matrix([[0, 1, 0], [0, 0, 1], [1, 0, 0]])
+    F = V + R * V
+
+    #Act/Assert
+    print(V, R, F)
+    f = Matrix.normalize(F)
+    print(f)
+    
+    x, y, z = Matrix.UnpackVector(F)
+    print(x, y, z)
+    
+    VT = Matrix.transpose(V)
+    RT = Matrix.transpose(R)
+    print(VT, RT)
+    
+    print("\n\n\nCoords:")
+    print(F)
+    F = Matrix.toPolar(F)
+    print(F)
+    F = Matrix.toCartesian(F)
+    print(F)
+    F = Matrix.normalize(F)
+    print(F)
+
+    angles = Matrix.rFactors(F)
+    print(angles)
+    rotate = Matrix.rMatrix(angles)
+    print(rotate)
+    print("\n\nRotating...")
+    print(Matrix.UnpackVector(rotate * F))
